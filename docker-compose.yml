@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  # Servicio para la base de datos PostgreSQL
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: cas
+      POSTGRES_USER: cas
+      POSTGRES_PASSWORD: --cas--
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    container_name: custom-db-container-name
+    restart: always  # Configuración de reinicio automático
+
+  # Servicio para la aplicación Django
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:5555
+    volumes:
+      - .:/app
+    ports:
+      - "5555:5555"
+    depends_on:
+      - db
+    environment:
+      DJANGO_DB_HOST: db
+      DJANGO_DB_PORT: 5432
+      DJANGO_DB_NAME: cas
+      DJANGO_DB_USER: cas
+      DJANGO_DB_PASSWORD: --cas--
+    container_name: custom-web-container-name
+    restart: always  # Configuración de reinicio automático
+
+volumes:
+  pg_data:
+
+
+# Servicio para la aplicación React (comentado)
+# react-app:
+#   image: node:14
+#   working_dir: /app
+#   command: npm start
+#   volumes:
+#     - ./frontend:/app
+#   ports:
+#     - "3000:3000"
+#   container_name: custom-react-container-name  # Asignar nombre personalizado al contenedor de la aplicación React
