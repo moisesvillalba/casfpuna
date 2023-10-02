@@ -9,7 +9,11 @@ services:
       POSTGRES_USER: cas
       POSTGRES_PASSWORD: --cas--
     ports:
+<<<<<<< HEAD
       - "5432:5432"
+=======
+      - "5433:5433"
+>>>>>>> 4388c188be469cf6b0d78ad2c018c3f1fed39096
     volumes:
       - pg_data:/var/lib/postgresql/data
     container_name: custom-db-container-name
