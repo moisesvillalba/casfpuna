@@ -1,72 +1,93 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-# Custom User Manager
+
+class Pais(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nombre
+
+class Ciudad(models.Model):
+    nombre = models.CharField(max_length=255)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE, related_name='ciudades')
+
+    def __str__(self):
+        return self.nombre
+
+class Barrio(models.Model):
+    nombre = models.CharField(max_length=255)
+    ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, related_name='barrios')
+
+    def __str__(self):
+        return self.nombre
+
+# Gestor de usuarios personalizado
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, is_admin=False, password=None):
-        """
-        Creates and saves a User with the given email, name and password.
-        """
+    def create_user(self, email, nombre, documento, ciudad=None, pais=None, barrio=None, is_admin=False, password=None):
         if not email:
-            raise ValueError('User must have an email address')
+            raise ValueError('El usuario debe tener una dirección de correo electrónico')
         user = self.model(
             email=self.normalize_email(email),
-            name=name,
+            nombre=nombre,
+            documento=documento,
+            ciudad=ciudad,
+            pais=pais,
+            barrio=barrio,
             is_admin=is_admin
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, email, name, is_admin=True, password=None):
-        """
-        Creates and saves a Superuser with the given email, name and password.
-        """
+    def create_superuser(self, email, nombre, documento, ciudad=None, pais=None, barrio=None, is_admin=True, password=None):
         user = self.create_user(
             email=email,
             password=password,
-            name=name,
+            nombre=nombre,
+            documento=documento,
+            ciudad=ciudad,
+            pais=pais,
+            barrio=barrio,
             is_admin=is_admin
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
-# Custom User Model.
+# Modelo de usuario personalizado
 class User(AbstractBaseUser):
     email = models.EmailField(
-        verbose_name='Email',
+        verbose_name='Correo electrónico',
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=255)
-    is_active=models.BooleanField(default=True)
-    is_admin=models.BooleanField(default=False)
+    nombre = models.CharField(max_length=255)
+    documento = models.CharField(max_length=10, unique=True, verbose_name='Documento', default='')  
+    ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Ciudad')
+    pais = models.ForeignKey(Pais, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='País')
+    barrio = models.ForeignKey(Barrio, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Barrio')
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS=['name', 'is_admin']
+    USERNAME_FIELD = 'documento'
+    REQUIRED_FIELDS = ['email', 'nombre', 'is_admin']
 
     def __str__(self):
         return self.email
 
     def get_full_name(self):
-        return self.name
+        return self.nombre
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
         return self.is_admin
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
         return self.is_admin

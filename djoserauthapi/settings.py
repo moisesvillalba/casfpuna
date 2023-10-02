@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -81,11 +82,23 @@ WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'cas',  # Reemplaza con el nombre de tu base de datos
+#         'USER': 'cas',    # Reemplaza con tu usuario de PostgreSQL
+#         'PASSWORD': '--cas--',  # Reemplaza con tu contraseña de PostgreSQL
+#         'HOST': 'localhost',  # Reemplaza con la dirección del servidor de la base de datos si es necesario
+#         'PORT': '5432',       # Puerto predeterminado de PostgreSQL
+#     }
+# }
+
 
 # Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -160,30 +173,52 @@ SIMPLE_JWT = {
 
 # Djoser Settings
 DJOSER = {
+    # Define el campo de inicio de sesión (por defecto: 'username')
     'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE':True,
-    'ACTIVATION_URL':'/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL':True,
-    'SEND_CONFIRMATION_EMAIL':True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+
+    # Solicitar la confirmación de contraseña durante la creación de usuario
+    'USER_CREATE_PASSWORD_RETYPE': True,
+
+    # URL para la activación de la cuenta
+    'ACTIVATION_URL': '/activate/{uid}/{token}',
+
+    # Enviar correo electrónico de activación
+    'SEND_ACTIVATION_EMAIL': True,
+
+    # Enviar correo electrónico de confirmación de registro
+    'SEND_CONFIRMATION_EMAIL': True,
+
+    # Enviar correo electrónico de confirmación de cambio de contraseña
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+
+    # URL para restablecer la contraseña
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+
+    # Solicitar la confirmación de contraseña al restablecerla
     'SET_PASSWORD_RETYPE': True,
+
+    # Mostrar un mensaje de error si no se encuentra el correo electrónico al restablecer la contraseña
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
-    'TOKEN_MODEL': None,       # To Delete User Must Set it to None
-    'SERIALIZERS':{
-        'user_create': 'account.serializers.UserCreateSerializer',
-        'user': 'account.serializers.UserCreateSerializer',
+
+    # Configuración personalizada del modelo de token (por defecto: None)
+    'TOKEN_MODEL': None,
+
+    # Serializadores personalizados para diversas operaciones
+    'SERIALIZERS': {
+        'user_create': 'account.serializers.CustomUserCreateSerializer',
+        'user': 'account.serializers.CustomUserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
+
+    # Configuración personalizada de correo electrónico
     'EMAIL': {
         'activation': 'account.email.ActivationEmail',
         'confirmation': 'account.email.ConfirmationEmail',
         'password_reset': 'account.email.PasswordResetEmail',
         'password_changed_confirmation': 'account.email.PasswordChangedConfirmationEmail',
     },
-
-
 }
+
 
 
 CORS_ALLOWED_ORIGINS = [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## Django REST Framework Complete Authentication API with Djoser
 ### Video Link:- https://youtu.be/_IKk553cH2s
 
@@ -14,3 +15,6 @@ python manage.py runserver
 
 #### There is a File "DjoserAuth.postman_collection" which has Postman Collection You can import this file in your postman to test this API
 
+=======
+# cas
+>>>>>>> 43b1b24034b910235445327fecc1b1171ee6ce03
