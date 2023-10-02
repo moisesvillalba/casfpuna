@@ -13,12 +13,3 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
-
-#### There is a File "DjoserAuth.postman_collection" which has Postman Collection You can import this file in your postman to test this API
-
-=======
-# cas
->>>>>>> 43b1b24034b910235445327fecc1b1171ee6ce03
-=======
-# casfpuna
->>>>>>> 708a9f3ffbccead906164185e1cb373f6b7ea271
