@@ -7,9 +7,16 @@ class Pais(models.Model):
     def __str__(self):
         return self.nombre
 
-class Ciudad(models.Model):
+class Departamento(models.Model):
     nombre = models.CharField(max_length=255)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE, related_name='ciudades')
+
+    def __str__(self):
+        return self.nombre
+
+class Ciudad(models.Model):
+    nombre = models.CharField(max_length=255)
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, related_name='departamentos+')
 
     def __str__(self):
         return self.nombre
@@ -61,11 +68,29 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    nombre = models.CharField(max_length=255)
-    documento = models.CharField(max_length=10, unique=True, verbose_name='Documento', default='')  
-    ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Ciudad')
-    pais = models.ForeignKey(Pais, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='País')
-    barrio = models.ForeignKey(Barrio, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Barrio')
+    email_alternativo = models.EmailField(
+        verbose_name='Correo electrónico alternativo',
+        max_length=255,
+        unique=True,
+        null = True,
+    )
+    nombre = models.CharField(max_length=255, null = False)
+    apellido = models.CharField(max_length=255, null = False)
+    documento = models.CharField(max_length=10, unique=True, verbose_name='Documento', null= False)  
+    telefono = models.CharField(max_length=30, null = False)
+    fecha_nacimiento = models.DateField(null=False)
+    pais_nacimiento = models.ForeignKey(Pais, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='País Nacimiento')
+    departamento_nacimiento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Departamento Nacimiento')
+    ciudad_nacimiento = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Ciudad Nacimiento')
+    barrio_nacimiento = models.ForeignKey(Barrio, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Barrio Nacimiento')
+    tiene_residencia = models.BooleanField(default=False)
+    pais = models.ForeignKey(Pais, on_delete=models.SET_NULL, blank=False, null=False, verbose_name='País')
+    departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, blank=False, null=False, verbose_name='Departamento')
+    ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, blank=False, null=False, verbose_name='Ciudad')
+    barrio = models.ForeignKey(Barrio, on_delete=models.SET_NULL, blank=False, null=False, verbose_name='Barrio')
+    direccion_particular = models.CharField(max_length=255, null = False)
+    sexo = models.CharField(max_length=2, null= True, blank= True)
+    cedula_duplicada = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
