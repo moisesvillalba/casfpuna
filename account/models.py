@@ -91,7 +91,7 @@ class User(AbstractBaseUser):
     direccion_particular = models.CharField(max_length=255, null = False)
     sexo = models.CharField(max_length=2, null= True, blank= True)
     cedula_duplicada = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
