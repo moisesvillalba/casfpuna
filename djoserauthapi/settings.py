@@ -103,12 +103,24 @@ WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
 # }
 
 
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.postgresql',
+#          'NAME': 'cas',  # Reemplaza con el nombre de tu base de datos
+#          'USER': 'miusuario',    # Reemplaza con tu usuario de PostgreSQL
+#          'PASSWORD': 'mipass',  # Reemplaza con tu contraseña de PostgreSQL
+#          'HOST': 'desarrollodtic.pol.una.py',  # Reemplaza con la dirección del servidor de la base de datos si es necesario
+#          'PORT': '5432',       # Puerto predeterminado de PostgreSQL
+#      }
+# }
+
+
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
-         'NAME': 'cas',  # Reemplaza con el nombre de tu base de datos
-         'USER': 'miusuario',    # Reemplaza con tu usuario de PostgreSQL
-         'PASSWORD': 'mipass',  # Reemplaza con tu contraseña de PostgreSQL
+         'NAME': 'concurso',  # Reemplaza con el nombre de tu base de datos
+         'USER': 'myuser',    # Reemplaza con tu usuario de PostgreSQL
+         'PASSWORD': 'mypassword',  # Reemplaza con tu contraseña de PostgreSQL
          'HOST': 'desarrollodtic.pol.una.py',  # Reemplaza con la dirección del servidor de la base de datos si es necesario
          'PORT': '5432',       # Puerto predeterminado de PostgreSQL
      }
